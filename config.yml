@@ -1,15 +1,1 @@
-# lang:
-    # command:
-        # usage: "&cUsage: "
-        # claim:
-            # success: "&a[%amt%] box items claimed!"
-        # send:
-            # player-doesnt-exist: "&cSpecified player does not exist!"
-            # item-in-hand: "&cYou need to be holding an item in your hand!"
-            # success: "&aItem sent!"
-        # help:
-            # open: "Opens your Itembox"
-            # send: "Sends the item in your hand to the specified player. Player name is case sensitive"
-            # claimall: "Claims all items from your itembox. If your inventory is full, they will drop on the floor"
-    # box:
-        # inv-full: "&cInventory is full! Cannot claim!"
+##nothing to see here yet

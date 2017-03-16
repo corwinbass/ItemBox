@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.itembox.database.PlayerInfo;
+import org.itembox.main.LanguageSupport.Languages;
 import org.itembox.scroller.ScrollerInventory;
 
 public class ItemBoxGUIManager implements Listener {
@@ -29,12 +30,12 @@ public class ItemBoxGUIManager implements Listener {
 	@EventHandler
 	public void onBoxClick(InventoryClickEvent event){
 		if(event.getInventory().getName() == null) return;
-		if(!event.getInventory().getName().equals(ChatColor.GOLD + "ItemBox")) return;
+		if(!event.getInventory().getName().equals(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Title))) return;
 		event.setCancelled(true);
 		if(event.getCurrentItem() == null) return;
 		if(event.getCurrentItem().getItemMeta() == null) return;
 		if(event.getCurrentItem().getItemMeta().getLore() == null) return;
-		if(!event.getCurrentItem().getItemMeta().getLore().contains(ChatColor.GREEN + "Click to claim item.")) return;
+		if(!event.getCurrentItem().getItemMeta().getLore().contains(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_ClickToClaim))) return;
 		ItemStack clicked = event.getCurrentItem();
 		Player p = (Player) event.getWhoClicked();
 		ArrayList<ItemStack> buttons = getItemButtons(p);
@@ -46,7 +47,7 @@ public class ItemBoxGUIManager implements Listener {
 		}
 		int index = buttons.indexOf(clicked);
 		if(p.getInventory().firstEmpty() == -1){
-			p.sendMessage(ChatColor.RED + "Inventory is full! Cannot claim!");
+			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_InventoryFull));
 			p.closeInventory();
 			return;
 		}
@@ -58,7 +59,7 @@ public class ItemBoxGUIManager implements Listener {
 	
 	public void openItemBox(Player p){
 		
-		ScrollerInventory inv = new ScrollerInventory(getItemButtons(p), ChatColor.GOLD + "ItemBox" ,p);
+		ScrollerInventory inv = new ScrollerInventory(getItemButtons(p), ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Title) ,p);
 	}
 	
 	public ArrayList<ItemStack> getItemButtons(Player p){
@@ -77,7 +78,7 @@ public class ItemBoxGUIManager implements Listener {
 			}else{
 				String disp = ChatColor.RESET + "" + ChatColor.AQUA + item.getType().toString().substring(0, 1).toUpperCase() + item.getType().toString().substring(1).toLowerCase();
 				if(item.getDurability() != 0){
-					disp += " durability: " + item.getDurability();
+					disp += ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Durability).replaceAll("%durability%", "" + item.getDurability());
 				}
 				meta.setDisplayName(disp.replaceAll("_", " "));
 			}
@@ -86,8 +87,8 @@ public class ItemBoxGUIManager implements Listener {
 				lore.addAll(item.getItemMeta().getLore());
 			}
 			
-			lore.add(ChatColor.GREEN + "Click to claim item.");
-			lore.add(ChatColor.GREEN + "You need 1 empty slot to do this.");
+			lore.add(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_ClickToClaim));
+			lore.add(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_EmptySpaceNeeded));
 			meta.setLore(lore);
 			
 			button.setItemMeta(meta);

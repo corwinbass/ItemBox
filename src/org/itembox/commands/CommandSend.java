@@ -2,12 +2,14 @@ package org.itembox.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.itembox.database.PlayerInfo;
 import org.itembox.main.ItemBox;
+import org.itembox.main.LanguageSupport.Languages;
 
 public class CommandSend {
 	
@@ -21,29 +23,29 @@ public class CommandSend {
 			}
 			OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
 			if(args[1].equals(p.getName())){
-				p.sendMessage(ChatColor.RED + "You cannot send items to yourself!");
+				p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Cannot_Send_Yourself));
 				return;
 			}
 			if(op == null){
-				p.sendMessage(ChatColor.RED + "Specified player, " + args[1] + " doesn't exist. Check letter casing");
+				p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Player_Doesnt_Exist));
 				return;
 			}
 			if(op.getUniqueId().equals(p.getUniqueId())){
-				p.sendMessage(ChatColor.RED + "You cannot send items to yourself!");
+				p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Cannot_Send_Yourself));
 				return;
 			}
-			if(p.getItemInHand() == null){
-				p.sendMessage(ChatColor.RED + "You need to be holding an item in your hand!");
+			if(p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR){
+				p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Hand_Empty));
 				return;
 			}
 			ItemStack item = p.getItemInHand();
 			PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(op);
 			info.addItem(item);
 			p.setItemInHand(null);
-			p.sendMessage(ChatColor.GREEN + "Item sent!");
+			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success));
 			
 		}else{
-			sender.sendMessage(ChatColor.RED + "Only players may use this command");
+			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Only_Players));
 		}
 	
 	}

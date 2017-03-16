@@ -7,12 +7,16 @@ import java.sql.DriverManager;
 
 import java.sql.Statement;
 
+
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.itembox.database.FileSerializeException;
 import org.itembox.database.PlayerDataManager;
 import org.itembox.database.PlayerInfo;
 import org.itembox.scroller.ScrollerInventoryManager;
@@ -21,10 +25,28 @@ public class ItemBox extends JavaPlugin {
 	
 	public static ItemBox instance;
 	private PlayerDataManager playerDataManager;
+	public static LanguageSupport languageManager;
 	private CommandManager cmdExe;
+	private String lang = "eng";
 	public void onEnable(){
 		getConfig().options().copyDefaults(false);
 		saveConfig();
+
+		if(getConfig().isSet("lang")){
+			lang = getConfig().getString("lang");
+		}else{
+			getConfig().set("lang", "eng");
+			saveDefaultConfig();
+		}
+		
+		try {
+			languageManager = new LanguageSupport(this, lang);
+		} catch (FileSerializeException e1) {
+			Bukkit.getLogger().info("Could not initiate LanguageSupport. Something went wrong?");
+			Bukkit.getLogger().info("Plugin is going to be disabled.");
+			this.setEnabled(false);
+		}
+		
 		instance = this;
 		playerDataManager = new PlayerDataManager();
 		Bukkit.getPluginManager().registerEvents(new ScrollerInventoryManager(), this);
@@ -52,5 +74,9 @@ public class ItemBox extends JavaPlugin {
 
 	public PlayerDataManager getPlayerDataManager(){
 		return playerDataManager;
+	}
+	
+	public static LanguageSupport getLang(){
+		return languageManager;
 	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.itembox.database.PlayerInfo;
 import org.itembox.main.ItemBox;
 import org.itembox.main.ItemBoxGUIManager;
+import org.itembox.main.LanguageSupport.Languages;
 
 public class CommandClaimAll {
 	
@@ -26,10 +27,10 @@ public class CommandClaimAll {
 				p.updateInventory();
 			}
 			info.clearItems();
-			p.sendMessage(ChatColor.GREEN + "[" + amt + "] box items claimed!");
+			p.sendMessage(ChatColor.GREEN + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Success).replaceAll("%amt%", "" + amt));
 			
 		}else{
-			sender.sendMessage(ChatColor.RED + "Only players may use this command");
+			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Only_Players));
 		}
 	
 	}
