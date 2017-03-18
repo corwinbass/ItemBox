@@ -19,13 +19,17 @@ import org.itembox.main.ItemBox;
 public class PlayerDataManager{
 	
 	public boolean isSaving = false;
+	public String dir;
 	public static HashMap<UUID, PlayerInfo> loadedPlayers = new HashMap<UUID, PlayerInfo>();
 	public PlayerDataManager(){
+		dir = ItemBox.getInstance().getDataFolder().getPath() + "\\players.db";
+		//Bukkit.getLogger().info(ItemBox.getInstance().getDataFolder().getPath());
 		try {
 			  Connection c = null;
 			  Statement stmt = null;
 		      Class.forName("org.sqlite.JDBC");
-		      c = DriverManager.getConnection("jdbc:sqlite:plugins\\ItemBox\\players.db");
+		      
+		      c = DriverManager.getConnection("jdbc:sqlite:" + dir);
 		      stmt = c.createStatement();
 		      String sql = "CREATE TABLE IF NOT EXISTS PLAYERS " +
 		                   "(UUID STRING PRIMARY KEY     NOT NULL," +
@@ -88,7 +92,7 @@ public class PlayerDataManager{
 	    PlayerInfo info = new PlayerInfo(uuid);
 	    try {
 	      Class.forName("org.sqlite.JDBC");
-	      c = DriverManager.getConnection("jdbc:sqlite:plugins\\ItemBox\\players.db");
+	      c = DriverManager.getConnection("jdbc:sqlite:" + dir);
 	      c.setAutoCommit(false);
 
 	      stmt = c.createStatement();
@@ -116,7 +120,7 @@ public class PlayerDataManager{
 	    Statement stmt = null;
 	    try {
 	      Class.forName("org.sqlite.JDBC");
-	      c = DriverManager.getConnection("jdbc:sqlite:plugins\\ItemBox\\players.db");
+	      c = DriverManager.getConnection("jdbc:sqlite:" + dir);
 	      c.setAutoCommit(false);
 
 	      stmt = c.createStatement();

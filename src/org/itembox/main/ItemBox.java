@@ -51,6 +51,7 @@ public class ItemBox extends JavaPlugin {
 		playerDataManager = new PlayerDataManager();
 		Bukkit.getPluginManager().registerEvents(new ScrollerInventoryManager(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemBoxGUIManager(), this);
+		Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
 		
 		cmdExe = new CommandManager(this);
 	}

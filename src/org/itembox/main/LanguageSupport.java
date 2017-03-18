@@ -163,7 +163,8 @@ public class LanguageSupport extends FileSerialize{
 	public static enum Languages{
 		Command_Only_Players("&cOnly players can use this command!"),
 		Command_ClaimAll_Success("&c[%amt%] box items claimed!"),
-		Command_Send_Success("&aItem sent!"),
+		Command_Send_Success("&aItem sent to %player%!"),
+		Command_Send_Receive("&aYou have recieved an item from %player%! Use /itembox open to claim it"),
 		Command_Send_Cannot_Send_Yourself("&cYou cannot send items to yourself!"),
 		Command_Send_Player_Doesnt_Exist("&cThe specified player doesn't exist!"),
 		Command_Send_Hand_Empty("&cYou need to be holding an item in your hand!"),
@@ -173,11 +174,13 @@ public class LanguageSupport extends FileSerialize{
 		Command_ClaimAll_Description("Claims all items from your itembox. If your inventory is full, they will drop on the floor"),
 		Command_Open_Usage("/itembox open"),
 		Command_Open_Description("Opens your Itembox"),
+		Command_No_Permissions("&cYou don't have the permission to use this command!"),
 		GUI_ItemBox_Title("&6ItemBox"),
 		GUI_ItemBox_Durability("&6[durability: %durabiliy%]"),
 		GUI_ItemBox_ClickToClaim("&aClick to claim the item"),
 		GUI_ItemBox_EmptySpaceNeeded("&aSpace in your inventory is needed"),
 		GUI_ItemBox_InventoryFull("&cInventory is full! Cannot claim!"),
+		Misc_Join_Notif("&aYou have %amt% items in your item box. Use /itembox open to claim them"),
 		;
 		private String defaultSring;
 		

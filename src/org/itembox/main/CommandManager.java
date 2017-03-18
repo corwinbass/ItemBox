@@ -26,9 +26,12 @@ public class CommandManager {
 		if(command.getName().equalsIgnoreCase("itembox")){
 			if(args.length == 0){
 				sender.sendMessage(ChatColor.GOLD + "====ItemBox====");
-				sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Open_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Open_Description));
-				sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Send_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Send_Description));
-				sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Description));
+				if(sender.hasPermission("itembox.open")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Open_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Open_Description));
+				if(sender.hasPermission("itembox.send")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Send_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Send_Description));
+				if(sender.hasPermission("itembox.claimall")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Description));
 			}else if(args[0].equalsIgnoreCase("open")){
 				CommandOpen.runCommand(sender, args);
 			}else if(args[0].equalsIgnoreCase("send")){
@@ -37,9 +40,12 @@ public class CommandManager {
 				CommandClaimAll.runCommand(sender, args);
 			}else{
 				sender.sendMessage(ChatColor.GOLD + "====ItemBox====");
-				sender.sendMessage(ChatColor.YELLOW + "/itembox open" + ChatColor.GOLD + " - Opens your Itembox");
-				sender.sendMessage(ChatColor.YELLOW + "/itembox send [player]" + ChatColor.GOLD + " - Sends the item in your hand to the specified player. Player name is case sensitive");
-				sender.sendMessage(ChatColor.YELLOW + "/itembox claimall" + ChatColor.GOLD + " - Claims all items from your itembox. If your inventory is full, they will drop on the floor");
+				if(sender.hasPermission("itembox.open")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Open_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Open_Description));
+				if(sender.hasPermission("itembox.send")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_Send_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_Send_Description));
+				if(sender.hasPermission("itembox.claimall")&&sender.hasPermission("itembox.*"))
+					sender.sendMessage(ChatColor.YELLOW + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Usage) + ChatColor.GOLD + " - " + ItemBox.getLang().parseFirstString(Languages.Command_ClaimAll_Description));
 			}
 		}
 		

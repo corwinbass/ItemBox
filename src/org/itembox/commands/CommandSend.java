@@ -15,6 +15,10 @@ public class CommandSend {
 	
 	public static void runCommand(CommandSender sender, String[] args){
 
+		if(!sender.hasPermission("itembox.send")&&!sender.hasPermission("itembox.*")){
+			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_No_Permissions));
+			return;
+		}
 		if(sender instanceof Player){
 			Player p = (Player) sender;
 			if(args.length != 2){
@@ -42,8 +46,11 @@ public class CommandSend {
 			PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(op);
 			info.addItem(item);
 			p.setItemInHand(null);
-			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success));
-			
+			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success).replaceAll("player", p.getName()));
+			if(op.isOnline()){
+				Player target = Bukkit.getPlayer(op.getUniqueId());
+				target.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Receive).replaceAll("player", p.getName()));
+			}
 		}else{
 			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Only_Players));
 		}

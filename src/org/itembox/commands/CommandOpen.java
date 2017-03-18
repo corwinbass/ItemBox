@@ -10,7 +10,10 @@ import org.itembox.main.LanguageSupport.Languages;
 public class CommandOpen {
 	
 	public static void runCommand(CommandSender sender, String[] args){
-
+		if(!sender.hasPermission("itembox.open")&&!sender.hasPermission("itembox.*")){
+			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_No_Permissions));
+			return;
+		}
 		if(sender instanceof Player){
 			ItemBoxGUIManager.getInstance().openItemBox((Player) sender);
 		}else{

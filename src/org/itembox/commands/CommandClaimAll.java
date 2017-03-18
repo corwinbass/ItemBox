@@ -12,7 +12,10 @@ import org.itembox.main.LanguageSupport.Languages;
 public class CommandClaimAll {
 	
 	public static void runCommand(CommandSender sender, String[] args){
-
+		if(!sender.hasPermission("itembox.claimall")&&!sender.hasPermission("itembox.*")){
+			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_No_Permissions));
+			return;
+		}
 		if(sender instanceof Player){
 			Player p = (Player) sender;
 			PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(p);
