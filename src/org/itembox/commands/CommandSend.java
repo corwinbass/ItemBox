@@ -46,10 +46,10 @@ public class CommandSend {
 			PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(op);
 			info.addItem(item);
 			p.setItemInHand(null);
-			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success).replaceAll("player", p.getName()));
+			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success).replaceAll("%player%", op.getName()));
 			if(op.isOnline()){
 				Player target = Bukkit.getPlayer(op.getUniqueId());
-				target.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Receive).replaceAll("player", p.getName()));
+				target.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Receive).replaceAll("%player%", p.getName()));
 			}
 		}else{
 			sender.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Only_Players));

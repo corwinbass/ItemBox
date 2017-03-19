@@ -1,6 +1,6 @@
 name: ItemBox
 authors: [Hex_27]
-version: 0.0.2
+version: 0.0.4
 load: POSTWORLD
 description: Rain death from above
 main: org.itembox.main.ItemBox

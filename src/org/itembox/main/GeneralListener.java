@@ -12,7 +12,7 @@ public class GeneralListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(event.getPlayer());
 		if(info.getItems().size() > 0){
-			event.getPlayer().sendMessage(ItemBox.getLang().parseFirstString(Languages.Misc_Join_Notif));
+			event.getPlayer().sendMessage(ItemBox.getLang().parseFirstString(Languages.Misc_Join_Notif).replaceAll("%amt%", info.getItems().size() + ""));
 		}
 	}
 }
