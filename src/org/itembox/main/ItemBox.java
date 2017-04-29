@@ -24,6 +24,7 @@ import org.itembox.scroller.ScrollerInventoryManager;
 public class ItemBox extends JavaPlugin {
 	
 	public static ItemBox instance;
+	public static DynamicBoxManager dynamicBoxManager;
 	private PlayerDataManager playerDataManager;
 	public static LanguageSupport languageManager;
 	private CommandManager cmdExe;
@@ -38,7 +39,7 @@ public class ItemBox extends JavaPlugin {
 			getConfig().set("lang", "eng");
 			saveDefaultConfig();
 		}
-		
+		dynamicBoxManager = new DynamicBoxManager(this);
 		try {
 			languageManager = new LanguageSupport(this, lang);
 		} catch (FileSerializeException e1) {
@@ -73,6 +74,10 @@ public class ItemBox extends JavaPlugin {
 		return instance;
 	}
 
+	public static DynamicBoxManager getDynamicBoxManager(){
+		return dynamicBoxManager;
+	}
+	
 	public PlayerDataManager getPlayerDataManager(){
 		return playerDataManager;
 	}

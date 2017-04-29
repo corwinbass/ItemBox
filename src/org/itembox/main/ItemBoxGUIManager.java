@@ -2,6 +2,7 @@ package org.itembox.main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,9 +53,40 @@ public class ItemBoxGUIManager implements Listener {
 			return;
 		}
 		ItemStack item = items.get(index);
+		DynamicBoxManager manager = ItemBox.getDynamicBoxManager();
+		if(manager.isItemDynamicBox(item)){
+			String name = manager.getBoxNameFromItemStack(item);
+			if(manager.dynamicBoxes.containsKey(name)){
+				for(ChanceItemWrapper reward:manager.dynamicBoxes.get(name)){
+					if(randInt(0,100)<=reward.getChance()){
+						if(p.getInventory().firstEmpty() != -1){
+							p.getInventory().addItem(reward.getItem());
+						}else{
+							p.getWorld().dropItem(p.getLocation(), reward.getItem());
+						}
+						
+					}
+				}
+				info.removeItem(item);
+				openItemBox(p);
+				return;
+			}
+		}
+		
+		
 		p.getInventory().addItem(item);
 		info.removeItem(item);
 		openItemBox(p);
+	}
+	
+
+	public static int randInt(int min, int max) {
+
+	    Random rand = new Random();
+
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
 	}
 	
 	public void openItemBox(Player p){
@@ -67,6 +99,14 @@ public class ItemBoxGUIManager implements Listener {
 		PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(p);
 		for(ItemStack item:info.getItems()){
 			ItemStack button = new ItemStack(Material.CHEST, item.getAmount());
+			if(item.hasItemMeta() && item.getItemMeta().getLore() != null){
+				if(item.getItemMeta().getLore().contains(ItemBox.getDynamicBoxManager().boxKey)){
+					if(!ItemBox.getDynamicBoxManager().dynamicBoxes.containsKey(ItemBox.getDynamicBoxManager().getBoxNameFromItemStack(item))){
+						continue;
+					}
+					button = new ItemStack(Material.ENDER_CHEST);
+				}
+			}
 			if(item.getEnchantments().size() > 0){
 				button.addUnsafeEnchantments(item.getEnchantments());
 			}
@@ -85,6 +125,7 @@ public class ItemBoxGUIManager implements Listener {
 			
 			if(item.hasItemMeta() && item.getItemMeta().getLore() != null){
 				lore.addAll(item.getItemMeta().getLore());
+				
 			}
 			
 			lore.add(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_ClickToClaim));
