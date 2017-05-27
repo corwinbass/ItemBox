@@ -59,6 +59,7 @@ public class ItemBox extends JavaPlugin {
 	
 	public void onDisable(){
 		if(!playerDataManager.isSaving) playerDataManager.saveAll();
+		playerDataManager.loadedPlayers.clear();
 	}
 	
 	@Override

@@ -25,6 +25,7 @@ public class DynamicBoxManager {
 	public HashMap<String, ArrayList<ChanceItemWrapper>> dynamicBoxes = new HashMap<String, ArrayList<ChanceItemWrapper>>();
 	
 	public void loadDynamicBoxes(){
+		dynamicBoxes.clear();
 		ArrayList<String> stringlist = new ArrayList<String>();
 		if(!plugin.getConfig().isSet("dynamic-boxes")){
 			stringlist = new ArrayList<String>();
@@ -96,6 +97,22 @@ public class DynamicBoxManager {
 						Bukkit.getLogger().severe("[ItemBox] The equipment, " + item + "'s enchantment, " + s + " is in the wrong format! Please check the main page for formats");
 						continue;
 					}
+					
+					if(split[0].equalsIgnoreCase("name")){
+						ItemMeta meta = parsedItem.getItemMeta();
+						meta.setDisplayName(colorise(split[1].replaceAll("_", " ")));
+						parsedItem.setItemMeta(meta);
+						continue;
+					}
+					if(split[0].equalsIgnoreCase("lore")){
+						ItemMeta meta = parsedItem.getItemMeta();
+						List<String> lore = new ArrayList<String>();
+						for(String lorestr:colorise(split[1].replaceAll("_", " ")).split("<newline>")) lore.add(lorestr);
+						meta.setLore(lore);
+						parsedItem.setItemMeta(meta);
+						continue;
+					}
+					
 					boolean added = false;
 					for(Enchantment e:Enchantment.values()){
 						if(e.getName().equalsIgnoreCase(split[0])){
@@ -113,11 +130,40 @@ public class DynamicBoxManager {
 			}
 			items.add(new ChanceItemWrapper(parsedItem,chance));
 		}
-		
-		
-		
 		return items;
+	}
 	
+	public String stringFromItem(ItemStack item, int chance){
+		String str = item.getType().toString();
+		if(item.getDurability() != 0){
+			str+= ":" + item.getDurability();
+		}
+		str += "," + chance;
+		if(item.getItemMeta() != null){
+			if(item.getItemMeta().getDisplayName() != null){
+				str += " name:" + item.getItemMeta().getDisplayName().replaceAll("" + ChatColor.COLOR_CHAR, "&");;
+			}
+			if(item.getItemMeta().getLore() != null){
+				str += " lore:";
+				for(int i = 0; i < item.getItemMeta().getLore().size(); i++){
+					String lore = item.getItemMeta().getLore().get(i);
+					str+= lore.replaceAll(ChatColor.COLOR_CHAR + "", "&");;
+					if(i < item.getItemMeta().getLore().size()-1) str+="<newline>";
+				}
+			}
+		}
+		if(item.getEnchantments().size() > 0){
+			for(Enchantment e:item.getEnchantments().keySet()){
+				str+= " " + e.getName() + ":" + item.getEnchantments().get(e);
+			}
+				
+		}
+		return str;
+		
+	}
+	
+	public String colorise(String string){
+		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 	
 	public final String boxKey = ChatColor.RED + "" + ChatColor.GREEN + "" + ChatColor.AQUA + "" + ChatColor.DARK_RED + "" + ChatColor.GOLD + ChatColor.RED + "" + ChatColor.GREEN + "" + ChatColor.AQUA + "" + ChatColor.DARK_RED + "" + ChatColor.GOLD + ChatColor.RED + "" + ChatColor.GREEN + "" + ChatColor.AQUA + "" + ChatColor.DARK_RED + "" + ChatColor.GOLD; 

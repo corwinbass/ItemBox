@@ -22,7 +22,7 @@ public class PlayerDataManager{
 	public String dir;
 	public static HashMap<UUID, PlayerInfo> loadedPlayers = new HashMap<UUID, PlayerInfo>();
 	public PlayerDataManager(){
-		dir = ItemBox.getInstance().getDataFolder().getPath() + "\\players.db";
+		dir = ItemBox.getInstance().getDataFolder().getPath() + File.separator + "players.db";
 		//Bukkit.getLogger().info(ItemBox.getInstance().getDataFolder().getPath());
 		try {
 			  Connection c = null;
