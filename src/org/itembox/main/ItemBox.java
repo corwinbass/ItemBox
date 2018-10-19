@@ -55,6 +55,7 @@ public class ItemBox extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
 		
 		cmdExe = new CommandManager(this);
+		getCommand("itembox").setTabCompleter(cmdExe);
 	}
 	
 	public void onDisable(){

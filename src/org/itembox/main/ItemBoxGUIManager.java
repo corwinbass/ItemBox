@@ -1,11 +1,15 @@
 package org.itembox.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,7 +47,7 @@ public class ItemBoxGUIManager implements Listener {
 		PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(p);
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>(info.getItems());
 		if(!buttons.contains(clicked)){
-			p.sendMessage("" + buttons.size());
+			//p.sendMessage("" + buttons.size());
 			return;
 		}
 		int index = buttons.indexOf(clicked);
@@ -79,6 +83,33 @@ public class ItemBoxGUIManager implements Listener {
 		openItemBox(p);
 	}
 	
+	@EventHandler
+	public void onOtherBoxClick(InventoryClickEvent event){
+		if(event.getInventory().getName() == null) return;
+		if(event.getCurrentItem() == null) return;
+		if(event.getCurrentItem().getItemMeta() == null) return;
+		if(event.getCurrentItem().getItemMeta().getLore() == null) return;
+		if(!event.getCurrentItem().getItemMeta().getLore().contains(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_ClickToDelete))) return;
+		ItemStack clicked = event.getCurrentItem();
+		Player p = (Player) event.getWhoClicked();
+		if(!others.containsKey(p.getUniqueId())) return;
+		OfflinePlayer target = Bukkit.getOfflinePlayer(others.get(p.getUniqueId()));
+		if(!event.getInventory().getName().equals(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Others).replaceAll("%player%", target.getName()))) return;
+		ArrayList<ItemStack> buttons = getItemButtonsForOther(target);
+		event.setCancelled(true);
+		PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(target);
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>(info.getItems());
+		if(!buttons.contains(clicked)){
+			//p.sendMessage("" + buttons.size());
+			return;
+		}
+		int index = buttons.indexOf(clicked);
+		ItemStack item = items.get(index);
+		info.removeItem(item);
+		openOtherItemBox(p, target);
+	
+	}
+	
 
 	public static int randInt(int min, int max) {
 
@@ -92,6 +123,55 @@ public class ItemBoxGUIManager implements Listener {
 	public void openItemBox(Player p){
 		
 		ScrollerInventory inv = new ScrollerInventory(getItemButtons(p), ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Title) ,p);
+	}
+	public void openOtherItemBox(Player sender, OfflinePlayer p){
+		
+		ScrollerInventory inv = new ScrollerInventory(getItemButtonsForOther(p), ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Others).replaceAll("%player%", p.getName()) ,sender);
+		others.put(sender.getUniqueId(), p.getUniqueId());
+	}
+	HashMap<UUID, UUID> others = new HashMap<UUID,UUID>();
+	public ArrayList<ItemStack> getItemButtonsForOther(OfflinePlayer p){
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		PlayerInfo info = ItemBox.getInstance().getPlayerDataManager().getOrLoadPlayerInfo(p);
+		for(ItemStack item:info.getItems()){
+			ItemStack button = new ItemStack(Material.CHEST, item.getAmount());
+			if(item.hasItemMeta() && item.getItemMeta().getLore() != null){
+				if(item.getItemMeta().getLore().contains(ItemBox.getDynamicBoxManager().boxKey)){
+					if(!ItemBox.getDynamicBoxManager().dynamicBoxes.containsKey(ItemBox.getDynamicBoxManager().getBoxNameFromItemStack(item))){
+						continue;
+					}
+					button = new ItemStack(Material.ENDER_CHEST);
+				}
+			}
+			if(item.getEnchantments().size() > 0){
+				button.addUnsafeEnchantments(item.getEnchantments());
+			}
+			ItemMeta meta = button.getItemMeta();
+			List<String> lore = new ArrayList<String>();
+			if(item.hasItemMeta() && item.getItemMeta().getDisplayName() != null &&
+					!item.getItemMeta().getDisplayName().equals(item.getType().toString())){
+				meta.setDisplayName(item.getItemMeta().getDisplayName());
+			}else{
+				String disp = ChatColor.RESET + "" + ChatColor.AQUA + item.getType().toString().substring(0, 1).toUpperCase() + item.getType().toString().substring(1).toLowerCase();
+				if(item.getDurability() != 0){
+					disp += ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_Durability).replaceAll("%durability%", "" + item.getDurability());
+				}
+				meta.setDisplayName(disp.replaceAll("_", " "));
+			}
+			
+			if(item.hasItemMeta() && item.getItemMeta().getLore() != null){
+				lore.addAll(item.getItemMeta().getLore());
+				
+			}
+			
+			lore.add(ItemBox.getLang().parseFirstString(Languages.GUI_ItemBox_ClickToDelete));
+			meta.setLore(lore);
+			
+			button.setItemMeta(meta);
+			items.add(button);
+		}
+		
+		return items;
 	}
 	
 	public ArrayList<ItemStack> getItemButtons(Player p){

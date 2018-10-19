@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.itembox.main.LanguageSupport.Languages;
+import org.itembox.utils.XMaterial;
 
 public class DynamicBoxManager {
 	
@@ -58,26 +59,33 @@ public class DynamicBoxManager {
 			String smaterial = splitComma[0];
 			String schance = splitComma[1];
 			int chance = 0;
-			int data = 0;
-			Material mat = null;
-			String[] splitmat = smaterial.split(":");
-			if(splitmat.length == 2){
-				try{
-					data = Integer.parseInt(splitmat[1]);
-				}catch(NumberFormatException e){
-					Bukkit.getLogger().severe("[ItemBox] The equipment, " + item + " is in the wrong format! Please check the main page for formats");
-					continue;
-				}
-				mat = Material.getMaterial(splitmat[0]);
-				
-			}else if(splitmat.length == 1){
-				mat = Material.getMaterial(splitmat[0]);
-			}
-			
-			if(mat == null){
-				Bukkit.getLogger().severe("[ItemBox] The material, " + mat + " does not exist. Please check main page for list of material names");
+//			int data = 0;
+//			Material mat = null;
+//			String[] splitmat = smaterial.split(":");
+//			if(splitmat.length == 2){
+//				try{
+//					data = Integer.parseInt(splitmat[1]);
+//				}catch(NumberFormatException e){
+//					Bukkit.getLogger().severe("[ItemBox] The equipment, " + item + " is in the wrong format! Please check the main page for formats");
+//					continue;
+//				}
+//				mat = Material.getMaterial(splitmat[0]);
+//				
+//			}else if(splitmat.length == 1){
+//				mat = Material.getMaterial(splitmat[0]);
+//			}
+//			
+//			if(mat == null){
+//				Bukkit.getLogger().severe("[ItemBox] The material, " + mat + " does not exist. Please check main page for list of material names");
+//				continue;
+//			}
+//			ItemStack parsedItem = new ItemStack(mat, 1, (byte) data);
+			XMaterial xmaterial = XMaterial.fromString(smaterial);
+			if(xmaterial == null){
+				Bukkit.getLogger().severe("[ItemBox] The material, " + smaterial + " does not exist. Please check main page for list of material names");
 				continue;
 			}
+			ItemStack parsedItem = xmaterial.parseItem();
 			
 			try{
 				chance = Integer.parseInt(schance);
@@ -86,7 +94,6 @@ public class DynamicBoxManager {
 				continue;
 			}
 			
-			ItemStack parsedItem = new ItemStack(mat, 1, (byte) data);
 			if(splitSpace.length > 1){
 				for(String s:splitSpace){
 					if(s.equals(splitSpace[0])){

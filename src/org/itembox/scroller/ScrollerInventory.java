@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.itembox.utils.XMaterial;
 
 public class ScrollerInventory{
 	
@@ -55,12 +56,12 @@ public class ScrollerInventory{
 	private Inventory getBlankPage(String name){
 		Inventory page = Bukkit.createInventory(null, 54, name);
 		
-		ItemStack nextpage =  new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 5);
+		ItemStack nextpage =  XMaterial.LIME_STAINED_GLASS_PANE.parseItem();
 		ItemMeta meta = nextpage.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + ">>");
 		nextpage.setItemMeta(meta);
 		
-		ItemStack prevpage = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 2);
+		ItemStack prevpage = XMaterial.MAGENTA_STAINED_GLASS_PANE.parseItem();
 		meta = prevpage.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "<<");
 		prevpage.setItemMeta(meta);

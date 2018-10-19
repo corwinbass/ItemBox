@@ -19,7 +19,6 @@ public class Utf8YamlConfiguration extends YamlConfiguration {
 
     public static Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
-    @Override
     public void load(InputStream stream) throws IOException, InvalidConfigurationException {
             Validate.notNull(stream, "Stream cannot be null");
 

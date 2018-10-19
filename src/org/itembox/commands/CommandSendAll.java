@@ -26,7 +26,6 @@ public class CommandSendAll {
 				return;
 			}
 			ItemStack item = p.getItemInHand();
-			p.setItemInHand(null);
 			if(p.getItemInHand() == null || p.getItemInHand().getType() == Material.AIR){
 				p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Hand_Empty));
 				return;
@@ -41,6 +40,7 @@ public class CommandSendAll {
 					target.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Receive).replaceAll("%player%", p.getName()));
 				}
 			}
+			p.setItemInHand(null);
 			p.sendMessage(ItemBox.getLang().parseFirstString(Languages.Command_Send_Success).replaceAll("%player%", i + ""));
 			
 		}else{
