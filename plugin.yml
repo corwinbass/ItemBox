@@ -1,9 +1,0 @@
-name: ItemBox
-authors: [Hex_27]
-version: 0.2.1
-load: POSTWORLD
-description: Send and recieve items and boxes!
-main: org.itembox.main.ItemBox
-commands:
-    itembox:
-        description: main command
