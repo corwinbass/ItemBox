@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+}
+
+dependencies {
+    compile 'org.spigotmc:spigot-api:1.14.1-R0.1-SNAPSHOT'
+}
+
+// Define the main class for the application
+mainClassName = 'org.itembox.main.ItemBox'
